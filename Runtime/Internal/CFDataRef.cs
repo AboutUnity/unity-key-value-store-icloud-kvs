@@ -39,8 +39,18 @@ namespace Gilzoide.KeyValueStore.ICloudKvs.Internal
             }
 
             IntPtr bytes = CFDataGetBytePtr(this);
-            int length = checked((int) CFDataGetLength(this));
-            return Marshal.PtrToStringUni(bytes, length);
+            int length = checked((int)CFDataGetLength(this));
+            if (bytes == IntPtr.Zero || length == 0)
+            {
+                return string.Empty;
+            }
+
+            // Copy the bytes from unmanaged memory to a managed byte array
+            byte[] buffer = new byte[length];
+            Marshal.Copy(bytes, buffer, 0, length);
+
+            // Decode as UTF-8
+            return System.Text.Encoding.UTF8.GetString(buffer);
         }
 
         public void Dispose()

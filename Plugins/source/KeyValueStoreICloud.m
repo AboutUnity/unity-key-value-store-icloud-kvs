@@ -118,7 +118,7 @@ void KeyValueStoreICloudKvs_SetString(const char *key, const char *cStr) {
 bool KeyValueStoreICloudKvs_TryGetString(const char *key, CFDataRef *outValue) {
     NSString* value = [NSUbiquitousKeyValueStore.defaultStore stringForKey:toNSString(key)];
     if (value) {
-        *outValue = CFBridgingRetain([value dataUsingEncoding:NSUTF16StringEncoding]);
+        *outValue = CFBridgingRetain([value dataUsingEncoding:NSUTF8StringEncoding]);
         return true;
     }
     else {
